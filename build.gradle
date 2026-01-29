@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'fraktale.org.solbach'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+// Dies ist der entscheidende Teil für Gradle 8.x
+application {
+    mainClass = 'fraktale.org.solbach.fraktale.Mandelbrot'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
