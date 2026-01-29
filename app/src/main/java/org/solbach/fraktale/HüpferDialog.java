@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package fraktale.org.solbach.fraktale;
+package org.solbach.fraktale;
 
 //import fraktale.org.solbach.fraktale.Hüpfer;
 

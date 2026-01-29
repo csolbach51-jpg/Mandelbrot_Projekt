@@ -1,4 +1,4 @@
-package fraktale.org.solbach.fraktale;
+package org.solbach.fraktale;
 
 import java.awt.*;
 import java.awt.event.*;

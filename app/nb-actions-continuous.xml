@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE actions SYSTEM "action-mapping.dtd">
+<actions>
+    <action name="build" repeatable="true">
+        <args>build</args>
+    </action>
+    <action name="clean" repeatable="true">
+        <args>clean</args>
+    </action>
+    <action name="compile.single" repeatable="true">
+        <args>--offline ${affectedBuildTasks}</args>
+        <reload rule="NEVER"/>
+    </action>
+    <action name="debug" repeatable="true">
+        <reload rule="NEVER"/>
+    </action>
+    <action name="debug.fix" repeatable="true">
+        <args>--offline ${affectedBuildTasks}</args>
+        <reload rule="NEVER"/>
+    </action>
+    <action name="debug.single" repeatable="true">
+        <reload rule="NEVER"/>
+    </action>
+    <action name="debug.single.method" repeatable="true">
+        <reload rule="NEVER"/>
+    </action>
+    <action name="debug.test.single" repeatable="true">
+        <reload rule="NEVER"/>
+    </action>
+    <action name="delete" repeatable="true">
+        <args>clean</args>
+        <reload rule="NEVER"/>
+    </action>
+    <action displayName="Download Javadoc" name="download.javadoc" repeatable="true">
+        <reload rule="ALWAYS_ONLINE"/>
+    </action>
+    <action displayName="Download sources" name="download.sources" repeatable="true">
+        <reload rule="ALWAYS_ONLINE"/>
+    </action>
+    <action name="javadoc" repeatable="true">
+        <args>javadoc</args>
+    </action>
+    <action name="prime" repeatable="true"/>
+    <action name="rebuild" repeatable="true">
+        <args>clean build</args>
+    </action>
+    <action name="run" repeatable="true">
+        <args>${javaExec.workingDir} ${javaExec.environment} run --continuous ${javaExec.jvmArgs} ${javaExec.args}</args>
+    </action>
+    <action name="run.single" repeatable="true">
+        <args>-PrunClassName=${selectedClass} ${javaExec.workingDir} ${javaExec.environment} run --continuous ${javaExec.jvmArgs} ${javaExec.args}</args>
+    </action>
+    <action name="run.single.method" repeatable="true">
+        <args>"${cleanTestTaskName}" "${testTaskName}" --tests "${selectedMethod}" --continuous</args>
+    </action>
+    <action name="test" repeatable="true"/>
+    <action name="test.parallel" repeatable="true">
+        <args>--parallel --rerun-tasks ${taskWithProjects}</args>
+    </action>
+    <action name="test.single" repeatable="true">
+        <args>"${cleanTestTaskName}" "${testTaskName}" --tests "${selectedClass}" --continuous</args>
+    </action>
+</actions>
