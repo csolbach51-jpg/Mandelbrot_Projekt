@@ -13,23 +13,24 @@ plugins {
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
-
-
-repositories {
-    mavenCentral() // Sagt Gradle, wo es suchen soll
-}
-
 dependencies {
-    // Beispiel: Eine Bibliothek für JSON oder Grafik
-    implementation 'org.json:json:20231013' 
-    
-    // Deine Mandelbrot-Logik-Abhängigkeiten hier...
+    // Falls dein Projekt eine Bibliothek nutzt, hier eintragen
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+
+    // Dies behebt den Fehler "package org.junit.jupiter.api does not exist"
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
-// Apply a specific Java toolchain to ease working on different environments.
+
+test {
+    useJUnitPlatform()
+}
+
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
