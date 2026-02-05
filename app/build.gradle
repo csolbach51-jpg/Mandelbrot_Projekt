@@ -17,16 +17,18 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation libs.junit.jupiter
 
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // This dependency is used by the application.
-    implementation libs.guava
+repositories {
+    mavenCentral() // Sagt Gradle, wo es suchen soll
 }
 
+dependencies {
+    // Beispiel: Eine Bibliothek für JSON oder Grafik
+    implementation 'org.json:json:20231013' 
+    
+    // Deine Mandelbrot-Logik-Abhängigkeiten hier...
+}
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
