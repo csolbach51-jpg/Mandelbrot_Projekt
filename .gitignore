@@ -8,3 +8,11 @@ build
 
 # Ignore Kotlin plugin data
 .kotlin
+
+# Private Schlüssel
+gitkey
+gitkey.pub
+
+*.jar
+build/
+.gradle/
