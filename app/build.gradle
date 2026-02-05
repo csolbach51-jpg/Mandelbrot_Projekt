@@ -13,21 +13,24 @@ plugins {
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation libs.junit.jupiter
+    // Falls dein Projekt eine Bibliothek nutzt, hier eintragen
+    implementation 'org.apache.commons:commons-math3:3.6.1'
 
+    // Dies behebt den Fehler "package org.junit.jupiter.api does not exist"
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // This dependency is used by the application.
-    implementation libs.guava
 }
 
-// Apply a specific Java toolchain to ease working on different environments.
+test {
+    useJUnitPlatform()
+}
+
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
@@ -36,7 +39,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'fraktale.org.solbach.fraktale.Mandelbrot'
+    mainClass = 'org.solbach.fraktale.Mandelbrot'
 }
 
 tasks.named('test') {
@@ -44,6 +47,3 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-application {
-    mainClass = 'fraktale.org.solbach.fraktale.Mandelbrot'
-}

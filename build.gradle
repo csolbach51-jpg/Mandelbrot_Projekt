@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-group = 'fraktale.org.solbach'
+group = 'org.solbach.fraktale'
 version = '1.0'
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 
 // Dies ist der entscheidende Teil für Gradle 8.x
 application {
-    mainClass = 'fraktale.org.solbach.fraktale.Mandelbrot'
+    mainClass = 'org.solbach.fraktale.Mandelbrot'
 }
 
 java {
