@@ -44,6 +44,3 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-application {
-    mainClass = 'org.solbach.fraktale.Mandelbrot'
-}
