@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.awt.print.*;
 import javax.swing.*;
 
-public class Mandelbrot extends Hüpfer implements Printable, 
+public class Mandelbrot extends Hüpfer implements Printable,Runnable,
     MouseWheelListener, MouseMotionListener, ComponentListener, MouseListener {
 
     // 1. Variablen
@@ -19,6 +19,9 @@ public class Mandelbrot extends Hüpfer implements Printable,
     public static Mandelbrot mainframe;
     public JRadioButton radiobutton = new JRadioButton("Mandelbrot/Julia");
     public static JButton druckButton = new JButton("Drucken");
+    int threadx = 0;
+    int thready = 0;
+    private double doubleiterFraction;
 
     public Mandelbrot() {
         super();
@@ -26,6 +29,7 @@ public class Mandelbrot extends Hüpfer implements Printable,
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addComponentListener(this);
+        
     }
 
  @Override
@@ -45,20 +49,23 @@ protected void paintComponent(Graphics g) {
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
             
-            // Logik-Wahl: Mandelbrot oder Julia?
-            double iterFraction = radiobutton.isSelected() ? 
-                                  computeMandelbrotMenge(x, y) : 
-                                  computeJuliaMenge(x, y);
+            threadx = x;
+            thready = y;
+
+
             
+            
+            
+            this.run();
             // 3. FARBLOGIK (Hier passiert die Magie)
             int rgbColor;
-            if (iterFraction >= 1.0) {
+            if (doubleiterFraction >= 1.0) {
                 // Punkt ist innerhalb der Menge -> Schwarz
                 rgbColor = 0x000000; 
             } else {
                 // Punkt ist außerhalb -> Farbe basierend auf der Geschwindigkeit des Entkommens
                 // Wir nutzen HSB: Farbton (Hue), Sättigung (Saturation), Helligkeit (Brightness)
-                float hue = 0.7f + (float)iterFraction; // Ein schöner Blau-Lila Verlauf
+                float hue = 0.7f + (float)doubleiterFraction; // Ein schöner Blau-Lila Verlauf
                 rgbColor = Color.HSBtoRGB(hue, 0.8f, 1.0f);
             }
             
@@ -260,51 +267,69 @@ private double computeJuliaMengeForPrint(double xPixel, double yPixel, int w, in
 
   
 public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // 1. Das Hauptobjekt erstellen
-            mainframe = new Mandelbrot();
-            
-            // 2. Das Fenster (JFrame) bauen
-            JFrame win = new JFrame("Mandelbrot & Julia Fraktal");
-            win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            win.setLayout(new BorderLayout());
-
-            // 3. Das Tool-Panel mit Radiobutton und Druck-Button
-            JPanel tools = new JPanel();
-            // Direkt nachdem der Radiobutton erstellt wurde:
-mainframe.radiobutton.addActionListener(e -> {
-    // Erzwingt, dass die paintComponent-Methode neu aufgerufen wird
-    mainframe.repaint(); 
-    
-    // Optional: Ändert den Fenstertitel, damit du weißt, was gerade aktiv ist
-    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainframe);
-    if (topFrame != null) {
-        String modus = mainframe.radiobutton.isSelected() ? "Mandelbrot" : "Julia";
-        topFrame.setTitle("Fraktal-Explorer - Modus: " + modus);
-    }
-});
-            tools.add(mainframe.radiobutton);
-            
-            // Die Druck-Logik an den Button binden
-            druckButton.addActionListener(e -> mainframe.drucken());
-            tools.add(druckButton);
-
-            // 4. Komponenten zum Fenster hinzufügen
-            win.add(mainframe, BorderLayout.CENTER);
-            win.add(tools, BorderLayout.SOUTH);
-
-            // 5. WICHTIG: Die Maus-Listener am Fenster registrieren
-            // Damit das Scrollen überall funktioniert
-            win.addMouseWheelListener(mainframe);
-            win.addMouseMotionListener(mainframe);
-
-            // 6. Fenstergröße setzen und anzeigen
-            win.setSize(1000, 1000);
-            win.setLocationRelativeTo(null); // Fenster in die Mitte des Bildschirms
-            win.setVisible(true);
-            
-            // Einmal neu zeichnen erzwingen
-            mainframe.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // 1. Das Hauptobjekt erstellen
+                mainframe = new Mandelbrot();
+                mainframe.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+                
+                // 2. Das Fenster (JFrame) bauen
+                JFrame win = new JFrame("Mandelbrot & Julia Fraktal");
+                win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                win.setLayout(new BorderLayout());
+                
+                // 3. Das Tool-Panel mit Radiobutton und Druck-Button
+                JPanel tools = new JPanel();
+                // Direkt nachdem der Radiobutton erstellt wurde:
+                mainframe.radiobutton.addActionListener(e -> {
+                    // Erzwingt, dass die paintComponent-Methode neu aufgerufen wird
+                    mainframe.repaint();
+                    
+                    // Optional: Ändert den Fenstertitel, damit du weißt, was gerade aktiv ist
+                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainframe);
+                    if (topFrame != null) {
+                        String modus = mainframe.radiobutton.isSelected() ? "Mandelbrot" : "Julia";
+                        topFrame.setTitle("Fraktal-Explorer - Modus: " + modus);
+                    }
+                });
+                tools.add(mainframe.radiobutton);
+                
+                // Die Druck-Logik an den Button binden
+                druckButton.addActionListener(e -> mainframe.drucken());
+                tools.add(druckButton);
+                
+                // 4. Komponenten zum Fenster hinzufügen
+                win.add(mainframe, BorderLayout.CENTER);
+                win.add(tools, BorderLayout.SOUTH);
+                
+                // 5. WICHTIG: Die Maus-Listener am Fenster registrieren
+                // Damit das Scrollen überall funktioniert
+                win.addMouseWheelListener(mainframe);
+                win.addMouseMotionListener(mainframe);
+                
+                // 6. Fenstergröße setzen und anzeigen
+                win.setSize(1000, 1000);
+                win.setLocationRelativeTo(null); // Fenster in die Mitte des Bildschirms
+                win.setVisible(true);
+                
+                // Einmal neu zeichnen erzwingen
+                mainframe.repaint();
+            }
         });
+}
+
+    private void setDefaultCloseOperation(int EXIT_ON_CLOSE) {
+   
+    }
+
+    @Override
+    public void run() {
+        // Logik-Wahl: Mandelbrot oder Julia? 
+        doubleiterFraction = radiobutton.isSelected() ? 
+                computeMandelbrotMenge(threadx, thready) :
+                computeJuliaMenge(threadx, thready);
+            
+         
     }
 } // <--- Das ist die allerletzte Klammer der Klasse Mandelbrot}
